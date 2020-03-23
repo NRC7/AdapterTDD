@@ -12,9 +12,10 @@ import com.nrc7.adapter3.model.Book;
 
 import java.util.List;
 
-public class BookAdapter extends RecyclerView.Adapter<BookAdapter.MyViewHolder>{
+public class BookAdapter extends RecyclerView.Adapter<BookAdapter.MyViewHolder> {
 
     List<Book> bookList;
+    OnItemClickListener listener;
 
     public BookAdapter(List<Book> bookList) {
         this.bookList = bookList;
@@ -50,6 +51,16 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.MyViewHolder>{
     // SI O SI lleva una lista basada en el POJO o Modelo
     // Una interface, el context.
 
+    // Crear Interface para el click
+    public interface OnItemClickListener {
+        void onItemClick(int position);
+    }
+
+    // Sirve para utilizar el listener fuera de la clase
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
+    }
+
     // Primer paso
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
@@ -63,6 +74,13 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.MyViewHolder>{
             // Inicializar las vistas (findviewById())
             nameTv = itemView.findViewById(R.id.nameTv);
             authorTv = itemView.findViewById(R.id.authorTv);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+                    listener.onItemClick(position);
+                }
+            });
         }
     }
 }

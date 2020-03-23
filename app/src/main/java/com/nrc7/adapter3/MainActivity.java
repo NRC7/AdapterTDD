@@ -1,6 +1,7 @@
 package com.nrc7.adapter3;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -15,24 +16,31 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    // Una vez que tenga el layout RV dentro de la vista
-    RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        recyclerView = findViewById(R.id.bookRv);
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.container, ListFragment.newInstance("", ""), "listFragment")
+                .commit();
+    }
 
-        LinearLayoutManager manager = new LinearLayoutManager(getApplicationContext(), RecyclerView.VERTICAL, false);
-        recyclerView.setLayoutManager(manager);
-
-        recyclerView.setHasFixedSize(true);
-
-        List<Book> bookList = new DataSource().getBooks();
-        BookAdapter bookAdapter = new BookAdapter(bookList);
-        // Pasar el adapter al RV
-        recyclerView.setAdapter(bookAdapter);
+    @Override
+    public void onBackPressed() {
+        // super.onBackPressed();
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag("detailsFragment");
+        // Si no hay fragment de detalle, va hacia atras
+        if (fragment == null) {
+            super.onBackPressed();
+        }
+        // En caso contrario, escondo el detalle y muestro la lista nuevamente
+        else {
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.container, ListFragment.newInstance("", ""), "listFragment")
+                    .remove(fragment)
+                    .commit();
+        }
     }
 }
