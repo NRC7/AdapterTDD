@@ -1,0 +1,2 @@
+rootProject.name='Adapter3'
+include ':app'
