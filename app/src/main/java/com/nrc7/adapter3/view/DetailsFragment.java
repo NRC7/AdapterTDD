@@ -1,15 +1,19 @@
-package com.nrc7.adapter3;
+package com.nrc7.adapter3.view;
 
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.nrc7.adapter3.R;
+import com.nrc7.adapter3.databinding.FragmentDetailsBinding;
 
 
 public class DetailsFragment extends Fragment {
@@ -19,6 +23,8 @@ public class DetailsFragment extends Fragment {
 
     private String name;
     private String author;
+
+    FragmentDetailsBinding detailsBinding;
 
     public DetailsFragment() {
         // Required empty public constructor
@@ -46,17 +52,16 @@ public class DetailsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_details, container, false);
+        // Reemplazar el metodo inflate, por DatabindingUtil.inflate
+        detailsBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_details, container,false);
+        return detailsBinding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        TextView detailsName = view.findViewById(R.id.detailsName);
-        TextView detailsAuthor = view.findViewById(R.id.detailsAuthor);
-
-        detailsName.setText(name);
-        detailsAuthor.setText(author);
+        detailsBinding.detailsName.setText(name);
+        detailsBinding.detailsAuthor.setText(author);
     }
 }

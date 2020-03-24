@@ -8,6 +8,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.nrc7.adapter3.R;
+import com.nrc7.adapter3.databinding.ListItemBookBinding;
 import com.nrc7.adapter3.model.Book;
 
 import java.util.List;
@@ -26,9 +27,9 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.MyViewHolder> 
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // Crear ViewHolders onDemand, si necesito 10 vistas, 10 va a crear, etc.
         // Receta, que "siempre" se crea de la misma forma
-        View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.list_item_book, parent, false);
-        return new MyViewHolder(view);
+        ListItemBookBinding bookBinding = ListItemBookBinding.inflate(LayoutInflater.from(parent.getContext()),
+                parent, false);
+        return new MyViewHolder(bookBinding);
     }
 
     @Override
@@ -36,8 +37,10 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.MyViewHolder> 
         // Llenar el viewHolder con la info recibida de cada elemento
         // Por ejemplo porner una imagen
         Book book = bookList.get(position);
-        holder.nameTv.setText(book.getName());
-        holder.authorTv.setText(book.getAuthor());
+
+        // Las vistas estan dentro de bookBinding
+        holder.bookBinding.nameTv.setText(book.getName());
+        holder.bookBinding.authorTv.setText(book.getAuthor());
     }
 
     @Override
@@ -64,17 +67,14 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.MyViewHolder> 
     // Primer paso
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
-        // Traer las vistas del list_item
-        TextView nameTv;
-        TextView authorTv;
+        // Autogenerada por Databinding que contiene las vistas
+        ListItemBookBinding bookBinding;
 
-        public MyViewHolder(@NonNull View itemView) {
-            super(itemView);
+        public MyViewHolder(@NonNull ListItemBookBinding bookBinding) {
+            super(bookBinding.getRoot());
+            this.bookBinding = bookBinding;
 
-            // Inicializar las vistas (findviewById())
-            nameTv = itemView.findViewById(R.id.nameTv);
-            authorTv = itemView.findViewById(R.id.authorTv);
-            itemView.setOnClickListener(new View.OnClickListener() {
+            bookBinding.getRoot().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int position = getAdapterPosition();

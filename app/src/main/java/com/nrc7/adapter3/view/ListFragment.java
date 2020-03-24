@@ -1,9 +1,10 @@
-package com.nrc7.adapter3;
+package com.nrc7.adapter3.view;
 
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -14,7 +15,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.nrc7.adapter3.R;
 import com.nrc7.adapter3.adapter.BookAdapter;
+import com.nrc7.adapter3.databinding.FragmentListBinding;
 import com.nrc7.adapter3.model.Book;
 import com.nrc7.adapter3.model.DataSource;
 
@@ -32,7 +35,9 @@ public class ListFragment extends Fragment {
     private String mParam2;
 
     // Una vez que tenga el layout RV dentro de la vista
-    RecyclerView recyclerView;
+    // NombreDelLayout + Binding
+    FragmentListBinding listBinding;
+
     List<Book> bookList;
 
     public ListFragment() {
@@ -62,23 +67,23 @@ public class ListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_list, container, false);
+        listBinding = DataBindingUtil.inflate(inflater,R.layout.fragment_list, container, false);
+        return listBinding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        recyclerView = view.findViewById(R.id.bookRv);
 
         LinearLayoutManager manager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
-        recyclerView.setLayoutManager(manager);
+        listBinding.bookRv.setLayoutManager(manager);
 
-        recyclerView.setHasFixedSize(true);
+        listBinding.bookRv.setHasFixedSize(true);
 
         bookList = new DataSource().getBooks();
         BookAdapter bookAdapter = new BookAdapter(bookList);
         // Pasar el adapter al RV
-        recyclerView.setAdapter(bookAdapter);
+        listBinding.bookRv.setAdapter(bookAdapter);
 
         //ClickListener
         bookAdapter.setOnItemClickListener(new BookAdapter.OnItemClickListener() {

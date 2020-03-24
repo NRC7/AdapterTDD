@@ -2,17 +2,10 @@ package com.nrc7.adapter3;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
-import android.widget.LinearLayout;
 
-import com.nrc7.adapter3.adapter.BookAdapter;
-import com.nrc7.adapter3.model.Book;
-import com.nrc7.adapter3.model.DataSource;
-
-import java.util.List;
+import com.nrc7.adapter3.view.ListFragment;
 
 public class MainActivity extends AppCompatActivity {
 
