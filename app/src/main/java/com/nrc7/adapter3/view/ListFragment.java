@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,14 +18,16 @@ import android.widget.Toast;
 
 import com.nrc7.adapter3.R;
 import com.nrc7.adapter3.adapter.BookAdapter;
+import com.nrc7.adapter3.api.IData;
 import com.nrc7.adapter3.databinding.FragmentListBinding;
 import com.nrc7.adapter3.model.Book;
-import com.nrc7.adapter3.model.DataSource;
+import com.nrc7.adapter3.api.DataSource;
+import com.nrc7.adapter3.model.SerieIndicador;
 
 import java.util.List;
 
 
-public class ListFragment extends Fragment {
+public class ListFragment extends Fragment implements IData {
 
     // KEY del bundle
     private static final String ARG_PARAM1 = "param1";
@@ -37,8 +40,7 @@ public class ListFragment extends Fragment {
     // Una vez que tenga el layout RV dentro de la vista
     // NombreDelLayout + Binding
     FragmentListBinding listBinding;
-
-    List<Book> bookList;
+    BookAdapter bookAdapter;
 
     public ListFragment() {
         // Required empty public constructor
@@ -54,6 +56,8 @@ public class ListFragment extends Fragment {
         return fragment;
     }
 
+    // Este metodo se ejecuta antes de onCreateView() y de onViewCreated()
+    // Iniciar el llamado
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,6 +65,10 @@ public class ListFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+        // Traer referencia al DataSource antes de la creacion de vista
+        DataSource dataSource = new DataSource(this);
+        dataSource.getIndicadorList("dolar");
     }
 
     @Override
@@ -77,27 +85,36 @@ public class ListFragment extends Fragment {
 
         LinearLayoutManager manager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
         listBinding.bookRv.setLayoutManager(manager);
-
         listBinding.bookRv.setHasFixedSize(true);
 
-        bookList = new DataSource().getBooks();
-        BookAdapter bookAdapter = new BookAdapter(bookList);
+        // El adapter == null porque instancio el adapter dentro de otro metodo
+    }
+
+    // Los datos ahora estan dentro de este metodo
+    @Override
+    public void getIndicadorSerie(List<SerieIndicador> list) {
+        // Mover Adapter
+        bookAdapter = new BookAdapter(list, getContext());
         // Pasar el adapter al RV
         listBinding.bookRv.setAdapter(bookAdapter);
-
-        //ClickListener
+        // Mover el ClickListener
         bookAdapter.setOnItemClickListener(new BookAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
                 Toast.makeText(getContext(), "" + position, Toast.LENGTH_SHORT).show();
-
-                Book book = bookList.get(position);
-
+                // Contiene Fecha y Valor
+                SerieIndicador serieIndicador = list.get(position);
+                // Iniciar los fragments : getActivity().getSupportFragmentManager().beginTransaction()
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 fragmentManager.beginTransaction()
-                        .add(R.id.container, DetailsFragment.newInstance(book.getName(), book.getAuthor()), "detailsFragment")
+                        // TODO: Cambiar los parametros que van al detalle
+                        .add(R.id.container, DetailsFragment.newInstance(serieIndicador.getFecha(), String.valueOf(serieIndicador.getValor())), "detailsFragment")
                         .remove(fragmentManager.findFragmentByTag("listFragment"))
+                        .replace(R.id.container, DetailsFragment.newInstance("fecha","800"), "detailsFragment")
                         .commit();
+
+                // DetailsFragment.newInstance() == new DetailsFragment();
+
             }
         });
     }

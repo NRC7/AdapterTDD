@@ -13,8 +13,8 @@
             android:textSize="22sp"
             android:textColor="@android:color/white"
             android:gravity="center"
-            android:id="@+id/nameTv"
-            android:text="NOMBRE DE CADA LIBRO"
+            android:id="@+id/fechaTv"
+            android:text="FECHA DE CADA INDICADOR"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
@@ -22,8 +22,8 @@
             android:textSize="20sp"
             android:textColor="@android:color/white"
             android:gravity="center"
-            android:id="@+id/authorTv"
-            android:text="AUTOR DE CADA LIBRO"
+            android:id="@+id/valorTv"
+            android:text="VALOR DE CADA INDICADOR"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 

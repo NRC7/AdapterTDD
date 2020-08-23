@@ -10,7 +10,6 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.nrc7.adapter3.R;
 import com.nrc7.adapter3.databinding.FragmentDetailsBinding;
@@ -21,8 +20,8 @@ public class DetailsFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    private String name;
-    private String author;
+    private String fecha;
+    private String valor;
 
     FragmentDetailsBinding detailsBinding;
 
@@ -30,6 +29,7 @@ public class DetailsFragment extends Fragment {
         // Required empty public constructor
     }
 
+    // Factory Methods
     public static DetailsFragment newInstance(String param1, String param2) {
         DetailsFragment fragment = new DetailsFragment();
         Bundle args = new Bundle();
@@ -43,8 +43,8 @@ public class DetailsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            name = getArguments().getString(ARG_PARAM1);
-            author = getArguments().getString(ARG_PARAM2);
+            fecha = getArguments().getString(ARG_PARAM1);
+            valor = getArguments().getString(ARG_PARAM2);
         }
     }
 
@@ -60,8 +60,11 @@ public class DetailsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        detailsBinding.detailsName.setText(name);
-        detailsBinding.detailsAuthor.setText(author);
+        // Fecha original separada en dos partes
+        // [0] : Desde la T hacia la izquerda
+        // [1] : Desde la T hacia la derecha
+        String[] fechaModificada = fecha.split("T");
+        detailsBinding.detailsName.setText(fechaModificada[0]);
+        detailsBinding.detailsAuthor.setText(valor);
     }
 }

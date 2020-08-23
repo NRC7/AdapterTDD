@@ -15,6 +15,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Pegar fragmento en pantalla
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.container, ListFragment.newInstance("", ""), "listFragment")
                 .commit();
